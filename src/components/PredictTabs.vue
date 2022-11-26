@@ -9,7 +9,7 @@
         <!-- tabs forecasting -->
         <v-col class="mx-5">
             <v-tabs fixed-tabs v-model="tab" background-color="transparent" color="basil">
-                <v-for v-for="item in items" :key="item" :value="item">
+                <v-for v-for="item in this.object" :key="item" :value="item">
                     <v-tab>
                         {{ item }}
                     </v-tab>
@@ -17,7 +17,7 @@
             </v-tabs>
             <!-- table forecasting -->
             <v-window v-model="tab">
-                <v-for v-for="item in items" :key="item" :value="item">
+                <v-for v-for="item in this.object" :key="item" :value="item">
                     <v-window-item>
                         <v-card color="basil" flat>
                             <v-card>
@@ -30,6 +30,7 @@
         </v-col>
     </v-row>
 </template>
+
 <script>
 
 import { defineComponent } from 'vue'
@@ -40,12 +41,10 @@ export default defineComponent({
     components: {
         TableVue
     },
+    props: ['object'],
     data () {
         return {
-            tab: 'items',
-            items: [
-                'cabaimerah', 'cabairawit', 'Minyak', 'Gula', 'Telur'
-            ],
+            tab: this.object,
         }
     },
 })

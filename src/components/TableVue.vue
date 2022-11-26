@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col>
-                <v-table fixed-header height="35vh">
+                <v-table fixed-header height="50vh">
                     <thead>
                         <tr>
                             <th class="text-center bg-cyan-lighten-4">
@@ -40,31 +40,23 @@
                 <!-- input nilai alpha, beta, dan forecast-->
                 <v-row class="my-3">
                     <v-col>
-                        <v-card>
-                            <v-text-field v-model="m" label="Forecast :" type="number" min="1" step="1" filled>
-                            </v-text-field>
-                        </v-card>
+                        <v-text-field v-model="m" label="Forecast :" type="number" min="1" step="1" variant="outlined">
+                        </v-text-field>
                     </v-col>
                     <v-col>
-                        <v-card>
-                            <v-text-field v-model="alpha" label="Alpha" type="number" min="0.1" max="0.9" step="0.01"
-                                filled>
-                            </v-text-field>
-                        </v-card>
+                        <v-text-field v-model="alpha" label="Alpha" type="number" min="0.1" max="0.9" step="0.01"
+                            variant="outlined">
+                        </v-text-field>
                     </v-col>
                     <v-col>
-                        <v-card>
-                            <v-text-field v-model="beta" label="Beta" type="number" min="0.1" max="0.9" step="0.01"
-                                filled>
-                            </v-text-field>
-                        </v-card>
+                        <v-text-field v-model="beta" label="Beta" type="number" min="0.1" max="0.9" step="0.01"
+                            variant="outlined">
+                        </v-text-field>
                     </v-col>
                     <v-col>
-                        <v-card class="">
-                            <v-text-field disabled="true">
-                                <h5>MAPE : {{ percent(mape()) }}</h5>
-                            </v-text-field>
-                        </v-card>
+                        <v-text-field disabled="true" variant="outlined">
+                            <h5>MAPE : {{ percent(mape()) }}</h5>
+                        </v-text-field>
                     </v-col>
                 </v-row>
                 <ForecastVue :alpha="this.alpha" :beta="this.beta" :m="this.m"
@@ -78,7 +70,6 @@
 
 <script>
 import ForecastVue from './ForecastVue.vue'
-
 
 
 export default {
@@ -95,7 +86,7 @@ export default {
             items: [],
             alpha: 0.9,
             beta: 0.1,
-            m: ''
+            m: '',
 
         }
     },

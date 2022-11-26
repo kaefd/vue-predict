@@ -3,7 +3,7 @@
     <v-container>
         <v-row>
             <v-col>
-                <v-table fixed-header height="70vh">
+                <v-table fixed-header height="50vh">
                     <thead>
                         <tr>
                             <th class="text-center bg-red-lighten-2">
@@ -14,14 +14,15 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody v-if="m">
-                        <tr v-for="t in this.m" :key="t.indexOf">
+                    <tbody>
+                        <tr v-for="t in this.m" :key="t">
                             <td class="text-center">{{ periodm(t) }}</td>
                             <td class="text-center">{{ idr(Fm(t)) }}</td>
 
                         </tr>
                     </tbody>
                 </v-table>
+
             </v-col>
             <v-col>
                 <!-- ini grafik -->
@@ -48,7 +49,8 @@ export default {
     data () {
         return {
             At: '',
-            newForecast: this.forecast
+            Newperiode: [],
+            NewForecast: []
         }
     },
 
@@ -80,7 +82,7 @@ export default {
             //err = Ltz+Tt*Ttz
             let errm = (Number(this.At[t]) - (Number(this.Fm(t)))) / this.At[t]
             return errm
-        },
+        }
 
     },
 

@@ -1,7 +1,10 @@
 <template>
-  <v-container fluid>
-    <PredictTabs class="px-5" />
-  </v-container>
+  <v-row>
+    <v-col>
+      <PredictTabs :object="this.object" class="px-5" />
+    </v-col>
+  </v-row>
+
 </template>
 
 <script>
@@ -12,10 +15,12 @@ import PredictTabs from '../components/PredictTabs.vue'
 
 export default defineComponent({
 
-  name: 'AboutView',
+  name: 'ForecastVue',
   components: {
     PredictTabs,
   },
+
+  props: ['object']
 });
 
 </script>
