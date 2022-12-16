@@ -13,12 +13,12 @@ import { computed, ref } from 'vue'
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 export default {
-    name: 'ChartVue',
+    name: 'BarChart',
     components: { Bar },
     props: {
         chartId: {
             type: String,
-            default: 'bar-chart'
+            default: 'Bar-chart'
         },
         datasetIdKey: {
             type: String,
@@ -44,20 +44,9 @@ export default {
             type: Object,
             default: () => { }
         },
-        object: {
-
-        },
-        periode: {
-
-        },
-        harga: {
-
-
-        },
-        forecast: {
-
-
-        }
+        harga: {},
+        periode: {},
+        titleChart: {}
     },
 
 
@@ -71,10 +60,6 @@ export default {
                 legend: {
                     position: 'top',
                 },
-                title: {
-                    display: true,
-                    text: 'Histogram',
-                },
             },
         })
 
@@ -82,14 +67,9 @@ export default {
             labels: props.periode,
             datasets: [
                 {
-                    label: 'Data Aktual',
+                    label: 'Harga ' + props.titleChart,
                     data: ref(props.harga).value,
-                    backgroundColor: ['#b2ebf2'],
-                },
-                {
-                    label: 'Prediksi',
-                    data: ref(props.forecast).value,
-                    backgroundColor: ['#e57373'],
+                    backgroundColor: ['#fdd835'],
                 },
             ],
         }))

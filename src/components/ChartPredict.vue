@@ -59,18 +59,20 @@ export default {
             type: Object,
             default: () => { }
         },
+        object: {
+
+        },
         periode: {
 
         },
-        des: {
+        harga: {
 
 
         },
-        rs: {
+        forecast: {
 
 
-        },
-        dtAktual: {}
+        }
     },
 
 
@@ -86,6 +88,7 @@ export default {
                 },
                 title: {
                     display: true,
+                    text: 'Histogram',
                 },
             },
         })
@@ -94,23 +97,17 @@ export default {
             labels: props.periode,
             datasets: [
                 {
-                    label: 'DES',
-                    data: ref(props.des).value,
+                    label: 'Data Aktual',
+                    data: ref(props.harga).value,
                     backgroundColor: ['#34E1FF'],
                     borderColor: ['#34E1FF'],
 
                 },
                 {
-                    label: 'Regressi Linier',
-                    data: ref(props.rs).value,
+                    label: 'Prediksi',
+                    data: ref(props.forecast).value,
                     backgroundColor: ['#FF4949'],
                     borderColor: ['#FF4949'],
-                },
-                {
-                    label: 'Data Aktual',
-                    data: ref(props.dtAktual).value,
-                    backgroundColor: ['#FF9949'],
-                    borderColor: ['#FF9949'],
                 },
             ],
         }))

@@ -1,56 +1,39 @@
 
 <template>
-    <v-container>
-        <v-row>
-            <v-col>
-                <v-table fixed-header height="50vh">
-                    <thead>
-                        <tr>
-                            <th class="text-center bg-red-lighten-2">
-                                Periode
-                            </th>
-                            <th class="text-center bg-red-lighten-2">
-                                forecast
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="t in this.m" :key="t">
-                            <td class="text-center">{{ periodm(t) }}</td>
-                            <td class="text-center">{{ idr(Fm(t)) }}</td>
 
-                        </tr>
-                    </tbody>
-                </v-table>
-
-            </v-col>
-            <v-col>
-                <!-- ini grafik -->
-                <v-card>
-                    <ChartVue class="px-10" :object="this.object" :periode="this.periode" :harga="this.harga"
-                        :forecast="this.forecast" />
-                </v-card>
-            </v-col>
-        </v-row>
-    </v-container>
+    <v-table fixed-header height="50vh">
+        <thead>
+            <tr>
+                <th class="text-center bg-red-lighten-2">
+                    Periode
+                </th>
+                <th class="text-center bg-red-lighten-2">
+                    forecast
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="t in this.m" :key="t">
+                <td class="text-center">{{ periodm(t) }}</td>
+                <td class="text-center">{{ idr(Fm(t)) }}</td>
+            </tr>
+        </tbody>
+    </v-table>
 </template>
 
 <script>
 
-import ChartVue from './ChartVue.vue'
 
 export default {
-    components: {
-        ChartVue,
-    },
 
     props: ['object', 'LastLt', 'LastTt', 'Lastperiode', 'm', 'mape', 'periode', 'harga', 'forecast'],
 
     data () {
         return {
             At: '',
-            Newperiode: [],
-            NewForecast: []
+            metode: ['DES', 'Regressi Linier'],
+            selectMetode: 'DES',
+            periodeNew: []
         }
     },
 
@@ -85,7 +68,6 @@ export default {
         }
 
     },
-
 }
 </script>
 <style>

@@ -1,80 +1,99 @@
 <template>
-    <v-container>
-        <v-row>
-            <v-col>
-                <v-table fixed-header height="50vh">
-                    <thead>
-                        <tr>
-                            <th class="text-center bg-cyan-lighten-4">
-                                Periode
-                            </th>
-                            <th class="text-center bg-cyan-lighten-4">
-                                Harga
-                            </th>
-                            <th class="text-center bg-cyan-lighten-4">
-                                Level(Lt)
-                            </th>
-                            <th class="text-center bg-cyan-lighten-4">
-                                Trend(Tt)
-                            </th>
-                            <th class="text-center bg-cyan-lighten-4">
-                                forecast(Yt + 1)
-                            </th>
-                            <th class="text-center bg-cyan-lighten-4">
-                                Error
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item, index in items" :key="item.index">
-                            <td class="text-center">{{ formatDate(manipulatedItem('periode', index)[index]) }}</td>
-                            <td class="text-center">{{ idr(manipulatedItem('harga')[index]) }}</td>
-                            <td class="text-center">{{ formatNumber(manipulatedItem('Lt')[index]) }}</td>
-                            <td class="text-center">{{ formatNumber(manipulatedItem('Tt')[index]) }}</td>
-                            <td class="text-center">{{ idr(manipulatedItem('forecast')[index]) }}</td>
-                            <td class="text-center">{{ Math.abs(formatNumber(manipulatedItem('error')[index])) }}</td>
-                        </tr>
-                    </tbody>
-                </v-table>
+    <v-row>
+        <v-col>
+            <!-- ini grafik prediksi -->
+            <v-select class="v-select" v-model="chartType" label="Jenis grafik" :items="itemChart"></v-select>
+            <v-if v-if="chartType == 'Bar'">
+                <v-card class="mb-5" variant="outlined">
+                    <ChartVue class="px-10 py-3" :object="object" :forecast="manipulatedItem('forecast')"
+                        :periode="manipulatedItem('periode')" :harga="manipulatedItem('harga')" />
+                </v-card>
+            </v-if>
+            <v-else-if v-else-if="chartType == 'Line'">
+                <v-card class="mb-5" variant="outlined">
+                    <ChartPredict class="px-10 py-3" :object="object" :forecast="manipulatedItem('forecast')"
+                        :periode="manipulatedItem('periode')" :harga="manipulatedItem('harga')" />
+                </v-card>
+            </v-else-if>
 
-                <!-- input nilai alpha, beta, dan forecast-->
-                <v-row class="my-3">
-                    <v-col>
-                        <v-text-field v-model="m" label="Forecast :" type="number" min="1" step="1" variant="outlined">
-                        </v-text-field>
-                    </v-col>
-                    <v-col>
-                        <v-text-field v-model="alpha" label="Alpha" type="number" min="0.1" max="0.9" step="0.01"
-                            variant="outlined">
-                        </v-text-field>
-                    </v-col>
-                    <v-col>
-                        <v-text-field v-model="beta" label="Beta" type="number" min="0.1" max="0.9" step="0.01"
-                            variant="outlined">
-                        </v-text-field>
-                    </v-col>
-                    <v-col>
-                        <v-text-field disabled="true" variant="outlined">
-                            <h5>MAPE : {{ percent(mape()) }}</h5>
-                        </v-text-field>
-                    </v-col>
-                </v-row>
+            <v-table fixed-header height="50vh">
+                <thead>
+                    <tr>
+                        <th class="text-center bg-cyan-lighten-4">
+                            Periode
+                        </th>
+                        <th class="text-center bg-cyan-lighten-4">
+                            Harga
+                        </th>
+                        <th class="text-center bg-cyan-lighten-4">
+                            Level(Lt)
+                        </th>
+                        <th class="text-center bg-cyan-lighten-4">
+                            Trend(Tt)
+                        </th>
+                        <th class="text-center bg-cyan-lighten-4">
+                            forecast(Yt + 1)
+                        </th>
+                        <th class="text-center bg-cyan-lighten-4">
+                            Error
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item, index in items" :key="item.index">
+                        <td class="text-center">{{ formatDate(manipulatedItem('periode', index)[index]) }}</td>
+                        <td class="text-center">{{ idr(manipulatedItem('harga')[index]) }}</td>
+                        <td class="text-center">{{ formatNumber(manipulatedItem('Lt')[index]) }}</td>
+                        <td class="text-center">{{ formatNumber(manipulatedItem('Tt')[index]) }}</td>
+                        <td class="text-center">{{ idr(manipulatedItem('forecast')[index]) }}</td>
+                        <td class="text-center">{{ Math.abs(formatNumber(manipulatedItem('error')[index])) }}</td>
+                    </tr>
+                </tbody>
+            </v-table>
+
+            <!-- input nilai alpha, beta, dan forecast-->
+            <v-row class="my-3">
+
+                <v-col>
+                    <v-text-field v-model="alpha" label="Alpha" type="number" min="0.1" max="0.9" step="0.01"
+                        variant="outlined">
+                    </v-text-field>
+                </v-col>
+                <v-col>
+                    <v-text-field v-model="beta" label="Beta" type="number" min="0.1" max="0.9" step="0.01"
+                        variant="outlined">
+                    </v-text-field>
+                </v-col>
+                <v-col>
+                    <v-text-field disabled="true" variant="outlined">
+                        <h5>MAPE : {{ percent(mape()) }}</h5>
+                    </v-text-field>
+                </v-col>
+            </v-row>
+            <v-card class="pa-5" variant="outlined">
+                <v-text-field class="v-select" v-model="m" label="Prediksi sebanyak :" type="number" min="1" step="1"
+                    variant="outlined">
+                </v-text-field>
                 <ForecastVue :alpha="this.alpha" :beta="this.beta" :m="this.m"
                     :LastLt="manipulatedItem('Lt')[items.length - 1]" :LastTt="manipulatedItem('Tt')[items.length - 1]"
                     :Lastperiode="manipulatedItem('periode')[items.length - 1]" :periode="manipulatedItem('periode')"
                     :harga="manipulatedItem('harga')" :forecast="manipulatedItem('forecast')" />
-            </v-col>
-        </v-row>
-    </v-container>
+            </v-card>
+        </v-col>
+    </v-row>
+    {{ mape() }}
 </template>
 
 <script>
 import ForecastVue from './ForecastVue.vue'
-
+import ChartVue from './ChartVue.vue'
+import ChartPredict from './ChartPredict.vue'
 
 export default {
     components: {
         ForecastVue,
+        ChartVue,
+        ChartPredict
     },
 
     props: ['object'],
@@ -83,6 +102,8 @@ export default {
 
 
         return {
+            chartType: 'Bar',
+            itemChart: ['Bar', 'Line'],
             items: [],
             alpha: 0.9,
             beta: 0.1,
@@ -102,7 +123,7 @@ export default {
         },
 
         formatNumber (num) {
-            return parseFloat(num).toFixed(2)
+            return parseFloat(num).toFixed(5)
         },
 
         formatDate (date) {
@@ -118,7 +139,7 @@ export default {
             let At = []
             let Lt = []
             let Tt = []
-            let Yt = []
+            let Yt = [null]
             let err = []
 
 
@@ -161,10 +182,13 @@ export default {
             }
 
             //menampilkan data
-            for (let i = 0; i < item.length; i++) {
+            for (let i = 1; i < item.length; i++) {
 
                 let forecast = Number(Lt[i]) + Number(Tt[i])  //hitung prediksi
                 Yt.push(forecast)
+            }
+
+            for (let i = 0; i < item.length; i++) {
 
                 let error = (At[i] - (Number(Yt[i]))) / At[i] //hitung error
                 err.push(error)
@@ -187,22 +211,22 @@ export default {
             } else 'Data Not Found'
 
         },
+
         mape () {
 
             let errors = []
-            let sum = 0
+            let sumErrors = 0
             let mape = 0
 
             for (let i = 0; i < this.items.length; i++) {
                 errors.push(Math.abs(this.manipulatedItem('error')[i]))
             }
 
-            for (let i = 0; i < this.items.length; i++) {
-                sum += errors[i]
+            for (let i = 0; i < this.items.length; i += 1) {
+                sumErrors += errors[i]
             }
 
-            mape = (sum / this.items.length) * 100
-
+            mape = (sumErrors / this.items.length) * 100
             return mape
         },
 
@@ -211,7 +235,7 @@ export default {
     },
 
     mounted () {
-        fetch('http://localhost:3000/' + this.object)
+        fetch('https://api-komoditas.000webhostapp.com/' + this.object + '.php')
             .then(res => res.json())
             .then(data => this.items = data)
             .catch(err => console.log(err.message))
